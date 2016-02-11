@@ -154,12 +154,12 @@ class Command(rocks.commands.sync.host.command):
 
 			# Ship the pickled file to destination host
 			cmd = 'scp -q -o UserKnownHostsFile=%s %s %s:%s; ' % (khfname, fname, host, fname)
-			# Remove the file from the frontend
-			cmd = cmd + 'rm -rf %s; ' % (fname)
 			# Run the unpickle procedure and run the plugin
 			cmd = cmd + 'ssh -o UserKnownHostsFile=%s %s ' % (khfname,host)	+\
 				'"/opt/rocks/bin/rocks '+\
 				'run host sec_attr %s"' % (fname)
+			# Remove the file from the frontend
+			cmd = cmd + ';rm -rf %s ' % (fname)
 			p = Parallel(cmd, host)
 			p.start()
 			threads.append(p)
